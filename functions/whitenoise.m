@@ -62,7 +62,11 @@ function ex = whitenoise(ex, replay)
     if strcmp(me.dist, 'gaussian')
       frame = 1 + me.contrast * randn(rs, me.ndims);
     elseif strcmp(me.dist, 'binary')
+      % this is actually uniformly distributed
       frame = 2 * rand(rs, me.ndims) * me.contrast + (1 - me.contrast);
+    elseif strcmp(me.dist, 'binary2')
+      % true binary would be
+      frame = floor(2 * rand(rs, me.ndims)) * me.contrast + (1 - me.contrast);
     else
       error(['Distribution ' me.dist ' not recognized! Must be gaussian or binary.']);
     end
@@ -75,7 +79,7 @@ function ex = whitenoise(ex, replay)
     else
 
       % make the texture
-      texid = Screen('MakeTexture', ex.disp.winptr, ex.disp.gray * frame);
+      texid = Screen('MakeTexture', ex.disp.winptr, uint8(ex.disp.gray * frame));
 
       % draw the texture, then kill it
       Screen('DrawTexture', ex.disp.winptr, texid, [], ex.disp.dstrect, 0, 0);
