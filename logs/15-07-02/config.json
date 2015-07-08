@@ -1,0 +1,173 @@
+[{
+  "function": "whitenoise",
+  "length": 22.5,
+  "seed": 154,
+  "framerate": 50,
+  "contrast": 0.1,
+  "dist": "binary",
+  "ndims": [32,32]
+}, {
+  "function": "whitenoise",
+  "length": 22.5,
+  "seed": 154,
+  "framerate": 50,
+  "contrast": 0.8,
+  "dist": "binary",
+  "ndims": [32,32]
+}, {
+  "function": "whitenoise",
+  "length": 22.5,
+  "seed": 154,
+  "framerate": 50,
+  "contrast": 0.1,
+  "dist": "binary",
+  "ndims": [32,32]
+}, {
+  "function": "whitenoise",
+  "length": 22.5,
+  "seed": 154,
+  "framerate": 50,
+  "contrast": 0.8,
+  "dist": "binary",
+  "ndims": [32,32]
+}, {
+  "function": "naturalscene",
+  "length": 90,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 20,
+  "framerate": 50,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [500,500],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 50,
+  "jitter": 1.5
+}, {
+  "function": "whitenoise",
+  "length": 5,
+  "seed": 254,
+  "framerate": 50,
+  "contrast": 0.8,
+  "dist": "binary",
+  "ndims": [32,32]
+}]
