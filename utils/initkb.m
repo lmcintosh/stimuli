@@ -14,6 +14,7 @@ function ex = initkb(ex)
 KbName('UnifyKeyNames');
 key.esc   = KbName('ESCAPE');
 key.space = KbName('space');
+key.t     = KbName('t');
 
 % Initialize KbCheck and return
 [key.keydown, key.secs, key.keycode] = KbCheck(-1);
