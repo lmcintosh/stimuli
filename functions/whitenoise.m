@@ -61,10 +61,10 @@ function ex = whitenoise(ex, replay)
     % generate stimulus pixels
     if strcmp(me.dist, 'gaussian')
       frame = 1 + me.contrast * randn(rs, me.ndims);
-    elseif strcmp(me.dist, 'binary')
+    elseif strcmp(me.dist, 'uniform')
       % this is actually uniformly distributed
       frame = 2 * rand(rs, me.ndims) * me.contrast + (1 - me.contrast);
-    elseif strcmp(me.dist, 'binary2')
+    elseif strcmp(me.dist, 'binary')
       % true binary would be
       frame = floor(2 * rand(rs, me.ndims)) * me.contrast + (1 - me.contrast);
     else
