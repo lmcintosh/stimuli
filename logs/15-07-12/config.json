@@ -1,0 +1,33 @@
+[{
+  "function": "whitenoise",
+  "length": 45,
+  "seed": 154,
+  "framerate": 50,
+  "contrast": 0.1,
+  "dist": "binary",
+  "ndims": [40,1]
+}, {
+  "function": "whitenoise",
+  "length": 45,
+  "seed": 154,
+  "framerate": 50,
+  "contrast": 0.8,
+  "dist": "binary",
+  "ndims": [40,1]
+}, {
+  "function": "whitenoise",
+  "length": 45,
+  "seed": 153,
+  "framerate": 50,
+  "contrast": 0.1,
+  "dist": "binary",
+  "ndims": [40,1]
+}, {
+  "function": "whitenoise",
+  "length": 45,
+  "seed": 153,
+  "framerate": 50,
+  "contrast": 0.8,
+  "dist": "binary",
+  "ndims": [40,1]
+}]
