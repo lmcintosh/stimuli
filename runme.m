@@ -26,6 +26,9 @@ try
   % Initalize the visual display
   ex = initdisp(ex);
 
+  % wait for trigger
+  ex = waitForTrigger(ex);
+
   % Parse this day's experiment config file
   basedir = fullfile('logs/', ex.today);
   stimuli = loadjson(fullfile(basedir, 'config.json'));

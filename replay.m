@@ -1,6 +1,7 @@
 % Regenerate stimulus frames for an experiment
 %
 % (c) 2015 Niru Maheswaranathan
+% revised by Lane McIntosh
 %
 % 04 May 2015 - initial version
 addpath('jsonlab/')
@@ -8,8 +9,8 @@ addpath('utils/')
 addpath('functions/')
 
 % load experiment
-today = datestr(now, 'yy-mm-dd');
-basedir = fullfile('logs/', today);
+which_expt = input('Which experiment would you like to replay (yy-mm-dd)? ','s');
+basedir = fullfile('logs/', which_expt);
 if exist(fullfile(cd, basedir, 'expt.json'), 'file') == 2
   expt = loadjson(fullfile(cd, basedir, 'expt.json'));
 else
