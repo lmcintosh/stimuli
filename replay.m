@@ -18,7 +18,7 @@ else
 end
 
 % filename for the hdf5 file
-fname = 'stimulus.h5' %fullfile(expanduser('~/Desktop/'), datestr(now, 'mmddyy'), 'stimulus.h5');
+fname = 'stimulus.h5';  %fullfile(expanduser('~/Desktop/'), datestr(now, 'mmddyy'), 'stimulus.h5');
 
 % replay experiments
 for stimidx = 1:length(expt.stim)
