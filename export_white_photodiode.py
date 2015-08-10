@@ -13,10 +13,11 @@ white_threshold = -4.7
 num_bin_files = 14
 bin_file_suffices = string.ascii_lowercase[:num_bin_files]
 fs = 10000.0 # Hz
-bin_file_duration = 500.0 # seconds
+#bin_file_duration = 500.0 # seconds
 
 # store timestamps of each white frame
 white_frame_timestamps = []
+cumulative_total_samples = 0
 
 # for each bin file
 for idl, letter in enumerate(bin_file_suffices):
@@ -56,7 +57,8 @@ for idl, letter in enumerate(bin_file_suffices):
             #plt.show()
             #time.sleep(2)
         
-            white_frame_timestamps.append(peak/fs + idl*bin_file_duration)
+            white_frame_timestamps.append((peak + cumulative_total_samples)/fs)
+    cumulative_total_samples += len(raw_data)
 
 save_filename = data_dir + 'photodiode_white_frame_timestamps.txt'
 np.savetxt(save_filename, white_frame_timestamps, fmt='%10.6f')
