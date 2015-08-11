@@ -14,20 +14,21 @@ all_threshold = -4.91
 num_bin_files = 14
 bin_file_suffices = string.ascii_lowercase[:num_bin_files]
 fs = 10000.0 # Hz
-bin_file_duration = 500.0 # seconds
+#bin_file_duration = 1000.0 # seconds
 
 # store timestamps of each all frame
 all_frame_timestamps = []
 all_frame_inds = []
 all_frame_values = []
 which_bin_file = []
+cumulative_total_samples = 0
 
 # for each bin file
 for idl, letter in enumerate(bin_file_suffices):
     # load bin files
     bin_filename = '%s%s.bin' %(experiment_date, letter)
     bin_file = data_dir + bin_filename
-    raw_data = binary.readbin(bin_file, chanlist=[0])
+    raw_data = binary.readbin(bin_file)[:,0] #, chanlist=[0])
     
     # Get snippets of local maxima that cross all_threshold
     indices_passing_thresh = np.argwhere(raw_data > all_threshold)[:,0]
@@ -54,10 +55,11 @@ for idl, letter in enumerate(bin_file_suffices):
                     import pdb
                     pdb.set_trace()
         
-            all_frame_timestamps.append(peak_ind/fs + idl*bin_file_duration)
+            all_frame_timestamps.append((peak_ind + cumulative_total_samples)/fs)
             all_frame_inds.append(peak_ind)
             all_frame_values.append(raw_data[peak_ind])
             which_bin_file.append(letter)
+    cumulative_total_samples += len(raw_data)
 
 
 save_filename = data_dir + '%s_photodiode_all_frames_subsampled.hdf5' %(experiment_date)

@@ -9,11 +9,11 @@ import string
 # where are the experiment's bin files?
 data_dir = os.path.expanduser('~/Documents/Stanford/00 Baccus Lab/Data 2015_07_02/')
 experiment_date = '150702'
-white_threshold = -4.7
+white_threshold = -4.75
 num_bin_files = 14
 bin_file_suffices = string.ascii_lowercase[:num_bin_files]
 fs = 10000.0 # Hz
-#bin_file_duration = 500.0 # seconds
+#bin_file_duration = 1000.0 # seconds
 
 # store timestamps of each white frame
 white_frame_timestamps = []
@@ -24,7 +24,7 @@ for idl, letter in enumerate(bin_file_suffices):
     # load bin files
     bin_filename = '%s%s.bin' %(experiment_date, letter)
     bin_file = data_dir + bin_filename
-    raw_data = binary.readbin(bin_file, chanlist=[0])
+    raw_data = binary.readbin(bin_file)[:,0] #, chanlist=[0])
     
     # Get snippets of local maxima that cross white_threshold
     indices_passing_thresh = np.argwhere(raw_data > white_threshold)[:,0]
