@@ -74,7 +74,7 @@ function ex = whitenoise(ex, replay)
     if replay
 
       % write the frame to the hdf5 file
-      h5write(ex.filename, [ex.group '/stim'], uint8(me.gray * frame), [1, 1, fi], [me.ndims, 1]);
+      h5write(ex.filename, [ex.group '/stim'], uint8(ex.disp.gray * frame), [1, 1, fi], [me.ndims, 1]);
 
     else
 

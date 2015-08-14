@@ -18,7 +18,7 @@ else
 end
 
 % filename for the hdf5 file
-fname = 'stimulus.h5';  %fullfile(expanduser('~/Desktop/'), datestr(now, 'mmddyy'), 'stimulus.h5');
+fname = 'stimulus.h5'; %fullfile(expanduser('~/Desktop/'), datestr(now, 'mmddyy'), 'stimulus.h5');
 
 % replay experiments
 for stimidx = 1:length(expt.stim)
@@ -34,7 +34,7 @@ for stimidx = 1:length(expt.stim)
 
   % store the stimulus pixel values
   h5create(fname, [group '/stim'], [me.ndims, stim.numframes], 'Datatype', 'uint8');
-  stim.filename = fullfile('/Volumes/data/Lane/2015-07-02/stimulus/', 'stimulus.h5'); %fname;
+  stim.filename = fullfile('stimulus.h5'); %fname;
   stim.group = group;
   stim.disp = expt.disp;
   eval(['ex = ' stim.function '(stim, true);']);
