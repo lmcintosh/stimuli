@@ -186,4 +186,42 @@
   "imgext": "*.mat",
   "jumpevery": 30,
   "jitter": 0.5
+}, {  "function": "whitenoise",
+  "length": 10,
+  "seed": 155,
+  "framerate": 30,
+  "contrast": 1,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "whitenoise",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "naturalscene",
+  "length": 10,
+  "seed": 25,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {  
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+
 }]
