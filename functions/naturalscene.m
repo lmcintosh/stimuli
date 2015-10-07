@@ -102,8 +102,10 @@ function ex = naturalscene(ex, replay)
       Screen('Close', texid);
 
       % update the photodiode with the top left pixel on the first frame
-      if mod(fi, me.jumpevery) == 1
+      if fi == 1
         pd = ex.disp.white;
+      elseif mod(fi, me.jumpevery) == 1
+        pd = 0.8 * ex.disp.white;
       else
         pd = ex.disp.pdscale * ex.disp.gray * frame(1);
       end
