@@ -26,7 +26,7 @@ for stimidx = 1:length(expt.stim)
   % pull out the function and parameters
   stim = expt.stim{stimidx};
   me = stim.params;
-  me.disp = expt.disp;
+  stim.params.gray = expt.disp.gray;
   fields = fieldnames(me);
 
   % group name

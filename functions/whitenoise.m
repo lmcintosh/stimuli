@@ -74,12 +74,12 @@ function ex = whitenoise(ex, replay)
     if replay
 
       % write the frame to the hdf5 file
-      h5write(ex.filename, [ex.group '/stim'], uint8(ex.disp.gray * frame), [1, 1, fi], [me.ndims, 1]);
+      h5write(ex.filename, [ex.group '/stim'], uint8(me.gray * frame), [1, 1, fi], [me.ndims, 1]);
 
     else
 
       % make the texture
-      texid = Screen('MakeTexture', ex.disp.winptr, uint8(ex.disp.gray * frame));
+      texid = Screen('MakeTexture', ex.disp.winptr, uint8(ex.disp.white * frame));
 
       % draw the texture, then kill it
       Screen('DrawTexture', ex.disp.winptr, texid, [], ex.disp.dstrect, 0, 0);
