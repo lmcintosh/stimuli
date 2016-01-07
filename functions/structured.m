@@ -69,15 +69,22 @@ function ex = structured(ex, replay)
   end
 
   % flag to tell us if we should start a new structured stimulus
+  start_new_seq = true;
   start_new_struct = true;
 
   % loop over frames
   for fi = 1:numframes
 
+    if start_new_seq
+      this_ordering = randperm(rs, numstim);
+      progress_in_seq = 1;
+      start_new_seq = false;
+    end
+      
     % pick a new stimulus
     if start_new_struct
 
-      mov = movies{randi(rs, numstim)};
+      mov = movies{this_ordering(progress_in_seq)};
       
       % start at first frame
       current_frame = 1;
@@ -101,6 +108,12 @@ function ex = structured(ex, replay)
       % check if on last frame
       if current_frame >= size(mov,1)
         start_new_struct = true;
+        progress_in_seq = progress_in_seq + 1;
+      end
+
+      % check if on last stimuli in sequence
+      if progress_in_seq >= numstim
+        start_new_seq = true;
       end
 
     end
