@@ -77,7 +77,7 @@ function ex = naturalmovie(ex, replay)
     % pick a new image
     if mod(fi, me.jumpevery) == 1
 
-      mov = rescale(movies{randi(nummovies)});
+      mov = movies{randi(nummovies)};
       
       % start frame somewhere in the movie, but so late that clip ends prematurely
       current_frame = randi(size(mov,1)-me.jumpevery);
@@ -108,17 +108,17 @@ function ex = naturalmovie(ex, replay)
     end
 
     % get the new frame
-    frame = 2 * img(xstart:(xstart + me.ndims(1) - 1), ystart:(ystart + me.ndims(2) - 1)) * me.contrast + (1 - me.contrast);
+    frame = img(xstart:(xstart + me.ndims(1) - 1), ystart:(ystart + me.ndims(2) - 1)) * me.contrast + (1 - me.contrast) * ex.disp.gray;
 
     if replay
 
       % write the frame to the hdf5 file
-      h5write(ex.filename, [ex.group '/stim'], uint8(me.gray * frame), [1, 1, fi], [me.ndims, 1]);
+      h5write(ex.filename, [ex.group '/stim'], frame, [1, 1, fi], [me.ndims, 1]);
 
     else
 
       % make the texture
-      texid = Screen('MakeTexture', ex.disp.winptr, ex.disp.gray * frame);
+      texid = Screen('MakeTexture', ex.disp.winptr, frame);
 
       % draw the texture, then kill it
       Screen('DrawTexture', ex.disp.winptr, texid, [], ex.disp.dstrect, 0, 0);
@@ -130,7 +130,7 @@ function ex = naturalmovie(ex, replay)
       elseif mod(fi, me.jumpevery) == 1
         pd = 0.8 * ex.disp.white;
       else
-        pd = ex.disp.pdscale * ex.disp.gray * frame(1);
+        pd = ex.disp.pdscale * frame(1);
       end
       Screen('FillOval', ex.disp.winptr, pd, ex.disp.pdrect);
 
