@@ -77,17 +77,17 @@ function ex = naturalmovie(ex, replay)
     % pick a new image
     if mod(fi, me.jumpevery) == 1
 
-      mov = movies{randi(nummovies)};
+      mov = movies{randi(rs, nummovies)};
       
       % start frame somewhere in the movie, but so late that clip ends prematurely
-      current_frame = randi(size(mov,1)-me.jumpevery);
+      current_frame = randi(rs, size(mov,1)-me.jumpevery);
 
       % keep one movie frame
       img = squeeze(mov(current_frame,:,:));
 
       % select just a part of the frame
-      xstart = randi(size(img,1) - me.ndims(1));
-      ystart = randi(size(img,2) - me.ndims(2));
+      xstart = randi(rs, size(img,1) - me.ndims(1));
+      ystart = randi(rs, size(img,2) - me.ndims(2));
 
       % increase frame by one
       current_frame = current_frame + 1;
