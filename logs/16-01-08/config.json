@@ -1,0 +1,229 @@
+[{
+  "function": "whitenoise",
+  "length": 10,
+  "seed": 150,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "whitenoise",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "naturalscene",
+  "length": 10,
+  "seed": 20,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {  
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {
+  "function": "structured",
+  "length": 10,
+  "seed": 100,
+  "framerate": 30,
+  "contrast": 1.0,
+  "structdir": "structs/",
+  "structext": "*.mat"
+}, {
+  "function": "structured",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "structdir": "structs/",
+  "structext": "*.mat"
+}, {
+  "function": "naturalmovie",
+  "length": 10,
+  "seed": 100,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "moviedir": "movies/",
+  "movext": "*.mat",
+  "jumpevery": 600,
+  "jitter": 0.0
+}, {
+  "function": "naturalmovie",
+  "length": 1,
+  "seed": 20,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "moviedir": "movies/",
+  "movext": "*.mat",
+  "jumpevery": 600,
+  "jitter": 0.0
+}, {
+  "function": "whitenoise",
+  "length": 10,
+  "seed": 151,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "whitenoise",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "naturalscene",
+  "length": 10,
+  "seed": 21,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {  
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {
+  "function": "structured",
+  "length": 10,
+  "seed": 101,
+  "framerate": 30,
+  "contrast": 1.0,
+  "structdir": "structs/",
+  "structext": "*.mat"
+}, {
+  "function": "structured",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "structdir": "structs/",
+  "structext": "*.mat"
+}, {
+  "function": "naturalmovie",
+  "length": 10,
+  "seed": 101,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "moviedir": "movies/",
+  "movext": "*.mat",
+  "jumpevery": 600,
+  "jitter": 0.0
+}, {
+  "function": "naturalmovie",
+  "length": 1,
+  "seed": 20,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "moviedir": "movies/",
+  "movext": "*.mat",
+  "jumpevery": 600,
+  "jitter": 0.0
+}, {
+  "function": "whitenoise",
+  "length": 10,
+  "seed": 152,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "whitenoise",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "dist": "binary",
+  "ndims": [50,50]
+}, {
+  "function": "naturalscene",
+  "length": 10,
+  "seed": 22,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {  
+  "function": "naturalscene",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "imgdir": "images/",
+  "imgext": "*.mat",
+  "jumpevery": 30,
+  "jitter": 0.5
+}, {
+  "function": "structured",
+  "length": 10,
+  "seed": 102,
+  "framerate": 30,
+  "contrast": 1.0,
+  "structdir": "structs/",
+  "structext": "*.mat"
+}, {
+  "function": "structured",
+  "length": 1,
+  "seed": 90,
+  "framerate": 30,
+  "contrast": 1.0,
+  "structdir": "structs/",
+  "structext": "*.mat"
+}, {
+  "function": "naturalmovie",
+  "length": 10,
+  "seed": 102,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "moviedir": "movies/",
+  "movext": "*.mat",
+  "jumpevery": 600,
+  "jitter": 0.0
+}, {
+  "function": "naturalmovie",
+  "length": 1,
+  "seed": 20,
+  "framerate": 30,
+  "contrast": 1.0,
+  "ndims": [50,50],
+  "moviedir": "movies/",
+  "movext": "*.mat",
+  "jumpevery": 600,
+  "jitter": 0.0
+}]
