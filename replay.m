@@ -32,6 +32,11 @@ for stimidx = 1:length(expt.stim)
   % group name
   group = ['/expt' num2str(stimidx)];
 
+  % for structured stimuli, I don't set the ndims as a parameter
+  if ~isfield(me, 'ndims')
+      me.ndims = [50 50];
+  end
+  
   % store the stimulus pixel values
   h5create(fname, [group '/stim'], [me.ndims, stim.numframes], 'Datatype', 'uint8');
   stim.filename = fullfile('stimulus.h5'); %fname;

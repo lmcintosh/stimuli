@@ -21,6 +21,9 @@ function ex = structured(ex, replay)
 
     % set the random seed
     rs = getrng(me.seed);
+    
+    % all the saved structured stimuli are 50 x 50
+    me.ndims = [50, 50];
 
   else
 
@@ -67,7 +70,7 @@ function ex = structured(ex, replay)
   for fileidx = 1:numstim
     movies(fileidx) = struct2cell(load(fullfile(me.structdir, files(fileidx).name)));
   end
-
+  
   % flag to tell us if we should start a new structured stimulus
   start_new_seq = true;
   start_new_struct = true;
@@ -126,7 +129,7 @@ function ex = structured(ex, replay)
     if replay
 
       % write the frame to the hdf5 file
-      h5write(ex.filename, [ex.group '/stim'], frame, [1, 1, fi], [me.ndims, 1]);
+      h5write(ex.filename, [ex.group '/stim'], uint8(frame), [1, 1, fi], [me.ndims, 1]);
 
     else
 
