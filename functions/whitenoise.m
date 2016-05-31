@@ -89,7 +89,7 @@ function ex = whitenoise(ex, replay)
       if fi == 1
         pd = ex.disp.white;
       else
-        pd = ex.disp.pdscale * ex.disp.gray * frame(1);
+        pd = 0;
       end
       Screen('FillOval', ex.disp.winptr, pd, ex.disp.pdrect);
 
