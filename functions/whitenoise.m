@@ -88,8 +88,8 @@ function ex = whitenoise(ex, replay)
       Screen('DrawTexture', ex.disp.winptr, texid, [], ex.disp.dstrect, 0, 0);
       Screen('Close', texid);
       
-      % Draw HiDens masking texture
-      Screen('DrawTexture', ex.disp.winptr, ex.disp.hidens_mask, [], [], 90);
+      % Draw HiDens masking texture, last argument specifies nearest neighbors interpolation
+      Screen('DrawTexture', ex.disp.winptr, ex.disp.hidens_mask, [], [], 90, 0);
 
       % update the photodiode with the top left pixel on the first frame
       if fi == 1
