@@ -76,11 +76,16 @@ class video_handler(object):
                           [self.clip.fps, self.clip.duration])
         
         
-    def getRMS(self, clip = None, t_start = 0, t_end = None, smooth = 15*60):
+    def getRMS(self, clip = None, t_start = 0, t_end = None, downsample = True,
+               smooth = 15*60):
         '''
         A method to calculate the RMS between individual frames of a clip.
-        Has optional parameters to set the start and end of RMS analysis. The
-        smoothing parameter is used to specify whether or not to smooth the
+        Has optional parameters to set the start and end of RMS analysis.
+        
+        If the downsample flag is set, getRMS will only compare frames every
+        second as opposed to at the framerate frequency
+        
+        The smoothing parameter is used to specify whether or not to smooth the
         resulting RMS values with a step filter. The time duration of the 
         step filter should be specified in seconds (e.g. smoothing = 60 -->
         step filter of length 1 minute). Default smoothing is for 15 minutes
@@ -143,6 +148,12 @@ class video_handler(object):
                 continue
             elif time > t_end:
                 break
+            
+            # downsample if flag is set
+            if downsample:
+                # skip samples that don't fall on the exact second
+                if not i % int(np.ceil(fps)) == 0:
+                    continue
            
             # user feedback; print progress every n frames
             n = 200
@@ -163,11 +174,21 @@ class video_handler(object):
                   
         # convolve data with step filter data if smoothing is set
         if smooth:
+            # if downsample is set, the length of the step should be smooth
+            #
+            # if downsample is not set, the length of the step should be
+            #     the duration of smooth times the framerate
+            if not downsample:
+                smooth *= fps
+                
             step = np.ones(smooth*fps)
             RMS_array = np.convolve(RMS_array, step, mode='same')
             
         # set self.RMS
         self.RMS = RMS_array
+        
+        # update metadata to include whether or not RMS was downsampled or not
+        self.set_metadata(['RMS Downsampled'], [downsample])       
             
         
     @staticmethod
@@ -228,4 +249,5 @@ class video_handler(object):
 ###############################################################################
 
 # instantiate video handler object
-obj = video_handler('test.mp4', getRMS = True)
+obj = video_handler('test.mp4')
+obj.getRMS(smooth = 60)
