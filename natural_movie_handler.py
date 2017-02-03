@@ -10,29 +10,37 @@ class video_handler(object):
     
     Attributes
     ----------
-    -self.clip
-    -self.metadata
-    -self.RMS
+    -self.clip: moviepy obj; 
+    -self.metadata: dict; stores metadata about video
+    -self.RMS: 1xn numpy array of 
 
     Methods
     ----------
+    -__init__: constructor method for video_handler
+    -set_metadata: setter used to update self.metadata dict
     
     v1.0: Jonathan Calles 1/30/17
 
     '''
-    
-    #########################################################################
-    ## Notes to Self
-    ## -------------
-    ## 
-    ## - Flesh out the documentation of the individual sub methods
-    ##
-    ## - Flesh out the documentation for the class
-    ##
-    #########################################################################
-    
-      
     def __init__(self, filename = None, getRMS = False):
+        '''
+        Constructor method for video_handler. Allows for optional 
+        implementation of load_video and getRMS with instantiation if flags 
+        are set.
+        
+        
+        Arguments
+        ----------
+        -filename: str; path to video file
+        -getRMS: bool; flag for running getRMS on instantiation
+        
+        
+        Returns
+        ----------
+        None
+        
+        
+        '''
         self.metadata = {}# initialize metadata library
         self.RMS = None
         
@@ -56,6 +64,12 @@ class video_handler(object):
         ----------
         -prop: str or list of str; key for metadata value
         -val: arbitrary/list of arbitrary types; value for metadata key
+        
+        Returns
+        ----------
+        None
+        
+        
         '''
         for i, key in enumerate(prop):
             self.metadata[key] = val[i]
@@ -64,7 +78,17 @@ class video_handler(object):
     def load_video(self, filename):
         '''
         A method used to load an .mp4 file into the object for
-        further processing.
+        further processing. Also updates self.metadata to include
+        the title, framerate and duration of the video.
+        
+        
+        Arguments
+        ----------
+        -filename: str; path to video file in question
+        
+        Returns
+        ----------
+        None
 
         '''
         
@@ -72,18 +96,21 @@ class video_handler(object):
         self.clip = VideoFileClip(filename, audio = False)
         
         # set framerate and video duration
-        self.set_metadata(['framerate','duration'],
-                          [self.clip.fps, self.clip.duration])
+        self.set_metadata(['title', 'framerate','duration'],
+                          [filename, self.clip.fps, self.clip.duration])
         
         
     def getRMS(self, clip = None, t_start = 0, t_end = None, downsample = True,
-               smooth = 15*60):
+               norm_flag = True, smooth = 15*60):
         '''
         A method to calculate the RMS between individual frames of a clip.
         Has optional parameters to set the start and end of RMS analysis.
         
         If the downsample flag is set, getRMS will only compare frames every
         second as opposed to at the framerate frequency
+        
+        If the norm_flag is set, getRMS will pass it to self.RMS() so that each
+        frame is normalized by its mean luminance before calculating RMS.
         
         The smoothing parameter is used to specify whether or not to smooth the
         resulting RMS values with a step filter. The time duration of the 
@@ -93,17 +120,34 @@ class video_handler(object):
             
         Arguments
         ----------
+        -clip: str; optional path to video file; use if video hasn't been
+            loaded yet
+        -t_start: float; optional start time for RMS analysis (in sec)
+        -t_end: float; optional end time for RMS analysis (in sec), defaults
+            to video end point
+        -downsample: bool; flag telling getRMS whether or not to calculate RMS
+            between every frame or just every second
+        -norm_flag: bool; flag telling getRMS whether or not to normalize
+            each frame by its luminance before calculating RMS
+        -smooth: float; optional parameter telling getRMS whether or not to 
+            smooth RMS with a step function of width 'smooth'. Set to None
+            or False if no smoothing is desired
+            
         
         Returns
         ----------
-        
-        
+        None
+    
         
         NOTE:In order to reduce memory footprint, individual video frames
         are only stored in a temporary variable while they are being used to
         calculate the RMS between it and the frame before and after it. To
         implement this, a 'toggle' variable is used so that the method 
         alternates saving frames between two elements of a list.
+        
+        
+        NOTE: getRMS will update self.metadata with whether or not RMS was 
+        calculated with or without normalization and downsampling.
         '''
         
         # set parameters if not specified
@@ -170,7 +214,8 @@ class video_handler(object):
             if frames[1] == []:
                 continue
             else:
-                RMS_array[i] = video_handler.RMS(frames[0], frames[1])
+                RMS_array[i] = video_handler.RMS(frames[0], frames[1],
+                         norm_flag = norm_flag)
                   
         # convolve data with step filter data if smoothing is set
         if smooth:
@@ -188,7 +233,8 @@ class video_handler(object):
         self.RMS = RMS_array
         
         # update metadata to include whether or not RMS was downsampled or not
-        self.set_metadata(['RMS Downsampled'], [downsample])       
+        self.set_metadata(['RMS Downsampled', 'RMS Normalized'],
+                          [downsample, norm_flag])       
             
         
     @staticmethod
@@ -207,22 +253,26 @@ class video_handler(object):
         Returns
         ----------
         -luminance: float; luminance of pixel or array of pixels
+        
+        
         '''
         
         return (R+G+B)/3
     
     @staticmethod
-    def RMS(x,y):
+    def RMS(x,y, norm_flag = False):
         '''
         A static method used to calculate the RMS between two 3 channel RGB
         frames x, y. Deliberately written such that x and y shape are
-        unimportant as long as they match. .
+        unimportant as long as they match.
         
                
         Arguments
         ----------
         -x: HxWx3 array of uint8; first frame
         -y: HxWx3 array of uint8; second frame
+        -norm_flag: bool; tells method whether or not to normalize luminance
+            before calculating RMS
         
         Returns
         ----------
@@ -238,6 +288,11 @@ class video_handler(object):
         yR, yG, yB = [y[:,:,i] for i in range(3)]
         yLum = video_handler.color2gray(yR, yG, yB)
         
+        # normalize each frame by mean luminance if norm_flag is set
+        if norm_flag:
+            xLum -= np.mean(xLum)
+            yLum -= np.mean(yLum)
+        
         # calculate RMS and return value
         return np.mean((xLum - yLum)**2)
     
@@ -247,7 +302,32 @@ class video_handler(object):
 # TEST SCRIPT
 #
 ###############################################################################
-
+#%%
 # instantiate video handler object
-obj = video_handler('test.mp4')
-obj.getRMS(smooth = 60)
+animal = video_handler('test.mp4')
+animal.getRMS(smooth = 60, norm_flag = False)
+
+animalx = np.linspace(0,1,len(animal.RMS))*animal.metadata['duration']
+animaly1 = animal.RMS
+
+animal.getRMS(smooth = 60, norm_flag = True)
+animaly2 = animal.RMS
+
+okgo = video_handler('test2.mp4')
+okgo.getRMS(smooth = 60, norm_flag = False)
+
+okgox = np.linspace(0,1,len(okgo.RMS))*okgo.metadata['duration']
+okgoy1 = okgo.RMS
+
+
+okgo.getRMS(smooth = 60, norm_flag = True)
+okgoy2 = okgo.RMS
+
+#%%
+f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+ax1.plot(animalx, animaly1, '--r')
+ax2.plot(animalx, animaly2, '--r')
+ax3.plot(okgox, okgoy1, '--b')
+ax4.plot(okgox, okgoy2, '--b')
+
+plt.show()
