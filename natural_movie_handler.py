@@ -4,35 +4,63 @@ from moviepy.editor import VideoFileClip
 
 class video_handler(object):
     '''
-    Video handler obejct: an object designed to take raw .mp4 files
-    of natural scenes, perform statistics on them and edit them
+    Video handler obejct: an object designed to take raw .mp4 files of natural 
+    scenes, perform statistics on them and edit them
     
     
     Attributes
     ----------
     -self.clip: moviepy obj; 
     -self.metadata: dict; stores metadata about video
-    -self.RMS: 1xn numpy array of 
+    -self.RMS: 1xn numpy array of RMS values
 
     Methods
     ----------
     -__init__: constructor method for video_handler
+    
     -set_metadata: setter used to update self.metadata dict
     
-    v1.0: Jonathan Calles 1/30/17
+    -load_video: setter used to load a video file into self.clip as well as 
+        autoset metadata based on qualites of the video
+        
+    -getRMS: method used to calculate frame by frame or second by second RMS
+        of luminance between frames
+        
+    -get_subclips: method used to find n clips with the highest peak RMS values
+        and save them to new .mp4 files
+        
+    -color2gray: static method used to calculate luminance of a frame or pixel
+    
+    -RMS: static method used to calculate RMS of luminance between two frames
+    
+    -peaks: static method used to find n highest values in an array, optionally
+        separated by a minimum time length
+    
+    v1.0: JC 1/30/17
+    
+    ###########################################################################
+    ##
+    ##                          Notes to Self
+    ##
+    ##  -SB suggested instead of picking clips with the most action, pick clips
+    ##      with the most variability of action (variance of RMS)
+    ##
+    ##
+    ###########################################################################
 
     '''
-    def __init__(self, filename = None, getRMS = False):
+    def __init__(self, filename = None, getRMS = False, subclips = None):
         '''
         Constructor method for video_handler. Allows for optional 
-        implementation of load_video and getRMS with instantiation if flags 
-        are set.
+        implementation of load_video, getRMS, and get_subclips with 
+        instantiation if flags are set.
         
         
         Arguments
         ----------
         -filename: str; path to video file
-        -getRMS: bool; flag for running getRMS on instantiation
+        -getRMS: bool; Optional flag for running getRMS on instantiation
+        -subclips: int; Optional number of subclips to save
         
         
         Returns
@@ -54,6 +82,11 @@ class video_handler(object):
         if getRMS:
             self.getRMS()
             
+        # optionally run self.getRMS and self.get_subclips with default
+        #   values
+        if subclips:
+            self.getRMS()
+            self.get_subclips(filename+'_sub', subclips)
         
         
     def set_metadata(self, prop, val):
@@ -95,9 +128,14 @@ class video_handler(object):
         # load vile into object
         self.clip = VideoFileClip(filename, audio = False)
         
-        # set framerate and video duration
-        self.set_metadata(['title', 'framerate','duration'],
-                          [filename, self.clip.fps, self.clip.duration])
+        # set meta data
+        for i, frame in enumerate(self.clip.iter_frames()):
+            if i > 0:
+                break
+            else:
+                frmsize = np.shape(frame)
+        self.set_metadata(['title', 'framerate','duration', 'framesize'],
+                          [filename,self.clip.fps,self.clip.duration,frmsize])
         
         
     def getRMS(self, clip = None, t_start = 0, t_end = None, downsample = True,
@@ -234,7 +272,48 @@ class video_handler(object):
         
         # update metadata to include whether or not RMS was downsampled or not
         self.set_metadata(['RMS Downsampled', 'RMS Normalized'],
-                          [downsample, norm_flag])       
+                          [downsample, norm_flag])
+    
+    def get_subclips(self, filename, numclips, vid_length = 15*60, 
+                     overlap = False):
+        '''
+        A method that takes self.RMS and saves n new .mp4 files of length
+        vid_length to new files. Requires self.RMS to already be set. The
+        overlap flag is used to tell the method whether or not to allow 
+        subclips to overlap.
+        
+        
+        Arguments
+        ----------
+        -filename: str; base file name for files to be written
+        -numclips: int; number of subclips to create
+        -vid_length: float; duration of each subclip in sec
+        -overlap: bool; if True: allows subclips to have overlapping segments
+                        if False: does not allow subclips to overlap
+        
+        Returns
+        ----------
+        None
+        '''
+        # set sampling rate to be fps
+        fps = self.metadata['framerate']
+        
+        # get peaks in RMS values
+        if overlap:
+            peaks = video_handler.peaks(self.RMS, numclips)
+        else:
+            peaks = video_handler.peaks(self.RMS, numclips, vid_length, fps)
+            
+        # calculate list of times to feed into clipcutter
+        time_list = peaks['indices']/fps
+        
+        # create subclips for each time in time_list
+        for i, time in enumerate(time_list):
+            # create subclip centered at time
+            subclip = self.clip.subclip(time - vid_length/2,
+                                        time + vid_length/2)
+            subclip.write_videofile(filename + '_{0}.mp4'.format(i+1))
+        
             
         
     @staticmethod
@@ -260,7 +339,7 @@ class video_handler(object):
         return (R+G+B)/3
     
     @staticmethod
-    def RMS(x,y, norm_flag = False):
+    def RMS(x, y, norm_flag = False):
         '''
         A static method used to calculate the RMS between two 3 channel RGB
         frames x, y. Deliberately written such that x and y shape are
@@ -294,10 +373,10 @@ class video_handler(object):
             yLum -= np.mean(yLum)
         
         # calculate RMS and return value
-        return np.mean((xLum - yLum)**2)
+        return np.mean((xLum - yLum)**2)    
     
     @staticmethod
-    def peaks(array, numpeaks, spacing = None, sampling_rate = None,):
+    def peaks(array, numpeaks, spacing = None, sampling_rate = None):
         '''
         A static method that takes an array of values and returns n peaks with
         their indices as well as time stamps. Optionally can select peaks with 
@@ -380,42 +459,8 @@ class video_handler(object):
         return peaks
         
         
-        
-###############################################################################
+#%%############################################################################
 #
 #                                   TEST SCRIPT
 #
 ###############################################################################
-##%%
-## instantiate video handler object
-#animal = video_handler('test.mp4')
-#animal.getRMS(smooth = 60, norm_flag = False)
-#
-#animalx = np.linspace(0,1,len(animal.RMS))*animal.metadata['duration']
-#animaly1 = animal.RMS
-#
-#animal.getRMS(smooth = 60, norm_flag = True)
-#animaly2 = animal.RMS
-#
-#okgo = video_handler('test2.mp4')
-#okgo.getRMS(smooth = 60, norm_flag = False)
-#
-#okgox = np.linspace(0,1,len(okgo.RMS))*okgo.metadata['duration']
-#okgoy1 = okgo.RMS
-#
-#
-#okgo.getRMS(smooth = 60, norm_flag = True)
-#okgoy2 = okgo.RMS
-#
-##%%
-#f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
-#ax1.plot(animalx, animaly1, '--r')
-#ax2.plot(animalx, animaly2, '--r')
-#ax3.plot(okgox, okgoy1, '--b')
-#ax4.plot(okgox, okgoy2, '--b')
-#
-#plt.show()
-#%%
-# Test peaks finder
-array = np.random.rand(1000)
-peaks = video_handler.peaks(array, 5, 100, 1)
