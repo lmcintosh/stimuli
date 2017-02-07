@@ -246,9 +246,9 @@ class video_handler(object):
         
         Arguments
         ----------
-        -R: float or array of floats; red channel
-        -G: float or array of floats; green channel
-        -B: float or array of floats; blue channel
+        -R: float or list of floats; red channel
+        -G: float or list of floats; green channel
+        -B: float or list of floats; blue channel
         
         Returns
         ----------
@@ -269,8 +269,8 @@ class video_handler(object):
                
         Arguments
         ----------
-        -x: HxWx3 array of uint8; first frame
-        -y: HxWx3 array of uint8; second frame
+        -x: HxWx3 np.array of uint8; first frame
+        -y: HxWx3 np.array of uint8; second frame
         -norm_flag: bool; tells method whether or not to normalize luminance
             before calculating RMS
         
@@ -296,38 +296,126 @@ class video_handler(object):
         # calculate RMS and return value
         return np.mean((xLum - yLum)**2)
     
-
+    @staticmethod
+    def peaks(array, numpeaks, spacing = None, sampling_rate = None,):
+        '''
+        A static method that takes an array of values and returns n peaks with
+        their indices as well as time stamps. Optionally can select peaks with 
+        a minimum spacing specified by the parameter "spacing".
+        
+        
+        Arguments
+        ----------
+        -array: list or np.array; list of RMS values
+        -numpeaks: int; number of desired peaks to return
+        -sampling_rate: float or int; Optional; sampling rate of the array, or 
+            how many indices per second
+        -spacing: float or int; Optional; desired amount of time between peaks
+            in seconds
+        
+        
+        Returns
+        ----------
+        -peaks:dict; ['indices'] = 1xn np.array of the n largest peaks
+                     ['sampling rate'] = float; frames per second
+                     ['spacing'] = float; time length of bins in sec
+        
+        
+        '''
+        if type(array) == np.ndarray:
+            pass
+        else:
+            try:
+                array = np.array(array)
+            except:
+                return 'Error: array not castable to np.array'
+    
+        #if spacing and sampling rate:
+        if sampling_rate and spacing:
+            #calculate number of indices within spacing
+            time_bins = sampling_rate*spacing
+            #d_ind = divide by two to get plus/minus bound
+            d_ind = time_bins/2
+        else:
+            d_ind = 0
+        
+        #declare indices array
+        indices = np.zeros(numpeaks, dtype = np.uint64)
+        
+        # create np.array of data values and indices
+        data = np.array([ 
+                [i for i in range(len(array))], array ])
+        
+        # loop until the desired number of peaks are chosen
+        for i in range(numpeaks):
+            # get index at highest array value
+            ind = np.argmax(data[1,:])
+            #store these in indices
+           # val = data[1,ind]
+            indices[i] = data[0,ind]
+            # remove peak and time bin surrounding it
+            lbound = int(indices[i] - d_ind)
+            ubound = int(indices[i] + d_ind)
+            # declare list for data to del
+            to_del = []
+            for j in range(len(data[0,:])):
+                if data[0,j] < lbound:
+                    continue
+                elif data[0,j] <= ubound:
+                    to_del.append(j)
+                else:
+                    break
+                
+            # update data to ignore time bins
+            data = data[:, 
+                        [i for i in range(len(data[0,:])) if i not in to_del]]
+    
+        # return peaks dict
+        peaks = {
+            'indices' : indices,
+            'sampling rate' : sampling_rate,
+            'spacing' : spacing
+        }
+        
+        return peaks
+        
+        
+        
 ###############################################################################
 #
-# TEST SCRIPT
+#                                   TEST SCRIPT
 #
 ###############################################################################
+##%%
+## instantiate video handler object
+#animal = video_handler('test.mp4')
+#animal.getRMS(smooth = 60, norm_flag = False)
+#
+#animalx = np.linspace(0,1,len(animal.RMS))*animal.metadata['duration']
+#animaly1 = animal.RMS
+#
+#animal.getRMS(smooth = 60, norm_flag = True)
+#animaly2 = animal.RMS
+#
+#okgo = video_handler('test2.mp4')
+#okgo.getRMS(smooth = 60, norm_flag = False)
+#
+#okgox = np.linspace(0,1,len(okgo.RMS))*okgo.metadata['duration']
+#okgoy1 = okgo.RMS
+#
+#
+#okgo.getRMS(smooth = 60, norm_flag = True)
+#okgoy2 = okgo.RMS
+#
+##%%
+#f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+#ax1.plot(animalx, animaly1, '--r')
+#ax2.plot(animalx, animaly2, '--r')
+#ax3.plot(okgox, okgoy1, '--b')
+#ax4.plot(okgox, okgoy2, '--b')
+#
+#plt.show()
 #%%
-# instantiate video handler object
-animal = video_handler('test.mp4')
-animal.getRMS(smooth = 60, norm_flag = False)
-
-animalx = np.linspace(0,1,len(animal.RMS))*animal.metadata['duration']
-animaly1 = animal.RMS
-
-animal.getRMS(smooth = 60, norm_flag = True)
-animaly2 = animal.RMS
-
-okgo = video_handler('test2.mp4')
-okgo.getRMS(smooth = 60, norm_flag = False)
-
-okgox = np.linspace(0,1,len(okgo.RMS))*okgo.metadata['duration']
-okgoy1 = okgo.RMS
-
-
-okgo.getRMS(smooth = 60, norm_flag = True)
-okgoy2 = okgo.RMS
-
-#%%
-f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
-ax1.plot(animalx, animaly1, '--r')
-ax2.plot(animalx, animaly2, '--r')
-ax3.plot(okgox, okgoy1, '--b')
-ax4.plot(okgox, okgoy2, '--b')
-
-plt.show()
+# Test peaks finder
+array = np.random.rand(1000)
+peaks = video_handler.peaks(array, 5, 100, 1)
