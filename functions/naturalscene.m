@@ -60,6 +60,8 @@ function ex = naturalscene(ex, replay)
     % store timestamps
     ex.stim{end}.timestamps = zeros(ex.stim{end}.numframes,1);
 
+    ex = get_hidens_mask(ex);
+
   end
 
 
@@ -106,13 +108,15 @@ function ex = naturalscene(ex, replay)
       Screen('DrawTexture', ex.disp.winptr, texid, [], ex.disp.dstrect, 0, 0);
       Screen('Close', texid);
 
+      Screen('DrawTexture', ex.disp.winptr, ex.disp.hidens_mask, [], [], 90);
+
       % update the photodiode with the top left pixel on the first frame
       if fi == 1
         pd = ex.disp.white;
-      elseif mod(fi, me.jumpevery) == 1
-        pd = 0.8 * ex.disp.white;
+      %elseif mod(fi, me.jumpevery) == 1
+      %  pd = 0.8 * ex.disp.white;
       else
-        pd = ex.disp.pdscale * ex.disp.gray * frame(1);
+        pd = 0;
       end
       Screen('FillOval', ex.disp.winptr, pd, ex.disp.pdrect);
 
