@@ -296,7 +296,12 @@ class video_handler(object):
         None
         '''
         # set sampling rate to be fps
-        fps = self.metadata['framerate']
+        if self.metadata['RMS Downsampled']:
+            fps = 1.0
+        elif self.metadata['framerate']:
+            fps = self.metadata['framerate']
+        else:
+            return 'Error: unspecified Framerate'
         
         # get peaks in RMS values
         if overlap:
