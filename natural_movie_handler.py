@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from tqdm import tqdm
 from moviepy.editor import VideoFileClip
 
 class video_handler(object):
@@ -222,7 +222,12 @@ class video_handler(object):
         num_frames = int(np.ceil((t_end - t_start)*fps))        
         RMS_array = np.zeros(num_frames)
         
-        for i, frame in enumerate(self.clip.iter_frames()):
+        # set up description for tqdm
+        desc = 'Calculating RMS in \'{0}\''.format(self.metadata['title'])
+        
+        
+        for i, frame in tqdm(enumerate(self.clip.iter_frames()), 
+                             ascii=True, desc=desc, total=num_frames):
             # calculate time
             time = i/fps
             # is this frame within the time interval selected?
@@ -237,11 +242,6 @@ class video_handler(object):
                 if not i % int(np.ceil(fps)) == 0:
                     continue
            
-            # user feedback; print progress every n frames
-            n = 200
-            if i%n == 0:
-                print('Processing Data: {0} s out of {1} s'.format(
-                        time, t_end))
             # store frame in frames
             frames[toggle] = frame 
             # switch toggle value
