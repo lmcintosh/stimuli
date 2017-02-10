@@ -54,7 +54,7 @@ function ex = whitenoise(ex, replay)
     ex.stim{end}.timestamps = zeros(ex.stim{end}.numframes,1);
     
     % Make HiDens masking texture
-    ex = get_hidens_mask(ex);
+    % ex = get_hidens_mask(ex);
 
   end
 
@@ -89,7 +89,7 @@ function ex = whitenoise(ex, replay)
       Screen('Close', texid);
       
       % Draw HiDens masking texture, last argument specifies nearest neighbors interpolation
-      Screen('DrawTexture', ex.disp.winptr, ex.disp.hidens_mask, [], [], 90, 0);
+      % Screen('DrawTexture', ex.disp.winptr, ex.disp.hidens_mask, [], [], 90, 0);
 
       % update the photodiode with the top left pixel on the first frame
       if fi == 1
