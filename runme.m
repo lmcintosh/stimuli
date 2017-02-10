@@ -24,7 +24,6 @@ try
   ex = initkb(ex);
 
   % Initalize the visual display
-  ex.disp.bgcol = 0;
   ex = initdisp(ex);
 
   % wait for trigger
